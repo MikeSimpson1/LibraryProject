@@ -4,6 +4,7 @@
 
 @using LibraryApplication.Data
 @inject BookService bookService
+
 <style>
     .card {
         /* Add shadows to create the "card" effect */
@@ -32,6 +33,25 @@
 
 <p>This component demonstrates fetching data from a service.</p>
 
+<EditForm Model="@bookData" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <p>
+        <label>
+            Title:
+            <InputText @bind-Value="bookData.Title" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Author:
+            <InputText @bind-Value="bookData.Author" />
+        </label>
+    </p>
+    <button type="submit">Submit</button>
+</EditForm>
+
 @if (data == null)
 {
     <p><em>Loading...</em></p>
@@ -55,9 +75,13 @@ else
 
 @code {
     private List<BookData>? data;
+    private BookData bookData = new BookData("","","","");
 
-    protected override async Task OnInitializedAsync()
+    private async Task HandleValidSubmit()
     {
-        data = await bookService.GetBookDataAsync();
+        if (!(bookData.Title.Equals(null) || bookData.Title.Equals("")) && !(bookData.Author.Equals(null) || bookData.Author.Equals("")))
+        {
+            data = await bookService.GetBookDataAsync(bookData.Title, bookData.Author);
+        }
     }
 }

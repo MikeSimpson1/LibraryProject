@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 public class BookService
 {
     HttpClient client = new HttpClient();
-    public async Task<List<BookData>> GetBookDataAsync()
+    public async Task<List<BookData>> GetBookDataAsync(string bookTitle, string bookAuthor)
     {
         List<BookData> books = new List<BookData>();
-        var stringTask = await client.GetStringAsync("https://www.googleapis.com/books/v1/volumes?q=the+institute+inauthor:stephen+king");
+        bookTitle = bookTitle.Replace(" ", "+");
+        bookAuthor = bookAuthor.Replace(" ", "+");
+        string QueryString = "https://www.googleapis.com/books/v1/volumes?q=" + bookTitle + "+inauthor:" + bookAuthor;
+        var stringTask = await client.GetStringAsync(QueryString);
         dynamic? bookQuery = JsonConvert.DeserializeObject(stringTask);
         if (bookQuery != null)
         {
@@ -18,7 +21,12 @@ public class BookService
                 string title = book.volumeInfo.title;
                 string author = book.volumeInfo.authors[0];
                 string published = book.volumeInfo.publishedDate;
-                string image = book.volumeInfo.imageLinks.thumbnail;
+                string image = "";
+                try
+                {
+                    image = book.volumeInfo.imageLinks.thumbnail;
+                }
+                catch(Exception e) { Console.Write(e.Message); }
                 BookData b = new(title, author, published, image);
                 books.Add(b);
             }

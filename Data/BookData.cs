@@ -14,5 +14,6 @@ public class BookData
         Author = author;
         PublishedDate = publishedDate;
         ImageLink = imageLink;
+
     }
 }

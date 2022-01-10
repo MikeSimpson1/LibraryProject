@@ -21,7 +21,7 @@ public class BookService
                 string title = book.volumeInfo.title;
                 string author = book.volumeInfo.authors[0];
                 string published = book.volumeInfo.publishedDate;
-                string image = "";
+                string image = "https://www.ianrankin.net/wp-content/uploads/2018/07/missingbook.png";
                 try
                 {
                     image = book.volumeInfo.imageLinks.thumbnail;

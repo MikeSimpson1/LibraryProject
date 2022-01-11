@@ -27,7 +27,26 @@ public class BookService
                     image = book.volumeInfo.imageLinks.thumbnail;
                 }
                 catch(Exception e) { Console.Write(e.Message); }
-                BookData b = new(title, author, published, image);
+                string isbn = "";
+                try
+                {
+                    isbn = book.volumeInfo.industryIdentifiers[0].identifier;
+                }
+                catch (Exception e) { Console.Write(e.Message); }
+                int pagecount = 0;
+                try
+                {
+                    pagecount = book.volumeInfo.pageCount;
+                }
+                catch (Exception e) { Console.Write(e.Message); }
+
+                string description = "";
+                try
+                {
+                    description = book.volumeInfo.description;
+                }
+                catch (Exception e) { Console.Write(e.Message); }
+                BookData b = new(title, author, published, image, isbn, pagecount, description);
                 books.Add(b);
             }
         }

@@ -49,12 +49,12 @@
             <InputText @bind-Value="bookData.Author" />
         </label>
     </p>
-    <button type="submit">Submit</button>
+    <button type="submit">Search</button>
 </EditForm>
 
 @if (data == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>@feedback</em></p>
 }
 else
 {
@@ -75,11 +75,13 @@ else
 
 @code {
     private List<BookData>? data;
-    private BookData bookData = new BookData("","","","");
+    private BookData bookData = new BookData("","","","", "",0,"");
+    private string feedback = "Search for books above!";
 
     private async Task HandleValidSubmit()
     {
-        if (!(bookData.Title.Equals(null) || bookData.Title.Equals("")) && !(bookData.Author.Equals(null) || bookData.Author.Equals("")))
+        feedback = "Searching...";
+        if (!StringUtils.IsNullOrEmpty(bookData.Title) && !StringUtils.IsNullOrEmpty(bookData.Author))
         {
             data = await bookService.GetBookDataAsync(bookData.Title, bookData.Author);
         }

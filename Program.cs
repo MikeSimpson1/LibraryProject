@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using LibraryApplication.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<BookService>();
 builder.Services.AddHttpClient();
+builder.Services.AddDbContext<BookDataDbContext>(
+        options => options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
 
 var app = builder.Build();
 

@@ -52,24 +52,27 @@
     <button type="submit">Search</button>
 </EditForm>
 
-@if (data == null)
+@if (data == null || data.Count <= 0)
 {
     <p><em>@feedback</em></p>
 }
 else
 {
     <div class="row">
-    @foreach (BookData b in data)
-    {
-            <div class="card">
-                <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px">
-                <div class="container">
-                    <h4><b>@b.Title</b></h4>
-                    <p>@b.Author</p>
-                    <p>@b.PublishedDate</p>
+        @if (data.Count > 0)
+        {
+            foreach (BookData b in data)
+            {
+                <div class="card">
+                    <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px">
+                    <div class="container">
+                        <h4><b>@b.Title</b></h4>
+                        <p>@b.Author</p>
+                        <p>@b.PublishedDate</p>
+                    </div>
                 </div>
-            </div>
-    }
+            }
+        }
     </div>
 }
 
@@ -84,6 +87,11 @@ else
         if (!StringUtils.IsNullOrEmpty(bookData.Title) && !StringUtils.IsNullOrEmpty(bookData.Author))
         {
             data = await bookService.GetBookDataAsync(bookData.Title, bookData.Author);
+        }
+
+        if (data.Count <= 0)
+        {
+            feedback = "No books found.";
         }
     }
 }

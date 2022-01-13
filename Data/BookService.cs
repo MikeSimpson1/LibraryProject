@@ -21,10 +21,17 @@ public class BookService
             List<BookData> books = new List<BookData>();
             bookTitle = bookTitle.Replace(" ", "+");
             bookAuthor = bookAuthor.Replace(" ", "+");
+
+            List<BookData> fromDb = GetBookDataFromDbAsync(bookTitle, bookAuthor);
+            if (fromDb.Count >= 10)
+            {
+                return fromDb;
+            }
+
             string QueryString = "https://www.googleapis.com/books/v1/volumes?q=" + bookTitle + "+inauthor:" + bookAuthor;
             var stringTask = await client.GetStringAsync(QueryString);
             dynamic? bookQuery = JsonConvert.DeserializeObject(stringTask);
-            if (bookQuery != null)
+            if (bookQuery != null && bookQuery.items != null)
             {
                 foreach (var book in bookQuery.items)
                 {
@@ -67,6 +74,15 @@ public class BookService
             await db.SaveChangesAsync();
 
             return books;
+        }
+    }
+    public List<BookData> GetBookDataFromDbAsync(string title, string author)
+    {
+        using (var scope = scopeFactory.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<BookDataDbContext>();
+            List<BookData> l = db.Books.AsQueryable().Where(b => b.Title.Contains(title)).ToList<BookData>(); //|| b.Author.Contains(author)
+            return l;
         }
     }
 }

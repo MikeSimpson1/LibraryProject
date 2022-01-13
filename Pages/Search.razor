@@ -4,6 +4,7 @@
 
 @using LibraryApplication.Data
 @inject BookService bookService
+@inject NavigationManager navManager
 
 <style>
     .card {
@@ -12,6 +13,7 @@
         transition: 0.3s;
         width: 200px;
         padding: 5px 5px;
+        cursor:pointer;
     }
 
         /* On mouse-over, add a deeper shadow */
@@ -63,7 +65,7 @@ else
         {
             foreach (BookData b in data)
             {
-                <div class="card">
+                <div class="card" @onclick="() => Redirect(b.Isbn_13)">
                     <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px">
                     <div class="container">
                         <h4><b>@b.Title</b></h4>
@@ -93,5 +95,10 @@ else
         {
             feedback = "No books found.";
         }
+    }
+
+    private void Redirect(string isbn)
+    {
+        navManager.NavigateTo("/BookInfo/" + isbn);
     }
 }

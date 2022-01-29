@@ -9,8 +9,9 @@ public class BookData
     public string? Title { get; set; }
     public string? Author { get; set; }
     public string? ImageLink { get; set; }
-    [Key]
     public string? Isbn_13 { get; set; }
+    [Key]
+    public int? Id { get; set; }
     public string? Pagecount { get; set; }
     public string? Description { get; set; }
 

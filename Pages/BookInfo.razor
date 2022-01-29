@@ -1,4 +1,4 @@
-﻿@page "/bookinfo/{isbn}"
+﻿@page "/bookinfo/{id}"
 
 <PageTitle>Book Info</PageTitle>
 
@@ -14,7 +14,7 @@
         /* Add shadows to create the "card" effect */
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         transition: 0.3s;
-        width: 200px;
+        width: 400px;
         padding: 5px 5px;
         cursor: pointer;
     }
@@ -46,6 +46,7 @@
             <div class="container">
                 <h4><b>@bookData.Title</b></h4>
                 <p>@bookData.Author</p>
+                <p>@bookData.Description</p>
                 <p>@bookData.PublishedDate</p>
             </div>
         </div>
@@ -54,11 +55,12 @@
 
 @code {
     [Parameter]
-    public string isbn { get; set; }
+    public string id { get; set; }
     private BookData bookData = null;
 
     protected override async Task OnInitializedAsync()
     {
-        bookData = bookService.GetBookByISBN(isbn);
+        int Id = int.Parse(id);
+        bookData = bookService.GetBookById(Id);
     }
 }

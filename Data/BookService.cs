@@ -121,4 +121,13 @@ public class BookService
             return db.Books.Find(isbn);
         }
     }
+
+    public BookData GetBookById(int id)
+    {
+        using (var scope = scopeFactory.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<BookDataDbContext>();
+            return db.Books.Find(id);
+        }
+    }
 }

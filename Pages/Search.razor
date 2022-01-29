@@ -65,7 +65,7 @@ else
         {
             foreach (BookData b in data)
             {
-                <div class="card" @onclick="() => Redirect(b.Isbn_13)">
+                <div class="card" @onclick="() => Redirect(b.Id)">
                     <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px">
                     <div class="container">
                         <h4><b>@b.Title</b></h4>
@@ -97,8 +97,8 @@ else
         }
     }
 
-    private void Redirect(string isbn)
+    private void Redirect(int? id)
     {
-        navManager.NavigateTo("/BookInfo/" + isbn);
+        navManager.NavigateTo("/BookInfo/" + id);
     }
 }

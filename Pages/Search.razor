@@ -91,7 +91,7 @@ else
             data = await bookService.GetBookDataAsync(bookData.Title, bookData.Author);
         }
 
-        if (data.Count <= 0)
+        if (data == null || data.Count <= 0)
         {
             feedback = "No books found.";
         }

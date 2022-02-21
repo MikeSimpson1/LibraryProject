@@ -1,0 +1,43 @@
+﻿@page "/register"
+
+<PageTitle>Register</PageTitle>
+
+@using LibraryApplication.Data
+
+<h1>Register</h1>
+
+<EditForm Model="@appUser" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <p>
+        <label>
+            Email:
+            <InputText @bind-Value="appUser.Email" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Username:
+            <InputText @bind-Value="appUser.UserName" />
+        </label>
+        <label>
+            Password:
+            <InputText @bind-Value="unhashedPassword" />
+        </label>
+    </p>
+    <button type="submit">Search</button>
+</EditForm>
+
+@code {
+    private AppUser appUser = new AppUser();
+    private string unhashedPassword = ""; 
+
+    private async Task HandleValidSubmit()
+    {
+        if (!StringUtils.IsNullOrEmpty(appUser.Email) && !StringUtils.IsNullOrEmpty(appUser.UserName) && !StringUtils.IsNullOrEmpty(unhashedPassword))
+        {
+            //do stuff
+        }
+    }
+}

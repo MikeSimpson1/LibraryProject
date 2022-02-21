@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using LibraryApplication.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,11 @@ builder.Services.AddHttpClient();
 builder.Services.AddDbContext<BookDataDbContext>(
         options => options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
 
+builder.Services.AddDbContext<UserDbContext>(
+        options => options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<UserDbContext>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,7 +30,7 @@ if (!app.Environment.IsDevelopment())
 
 
 app.UseStaticFiles();
-
+app.UseAuthentication();
 app.UseRouting();
 
 app.MapBlazorHub();

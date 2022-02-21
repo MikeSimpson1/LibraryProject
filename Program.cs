@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using LibraryApplication.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,13 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<BookService>();
-builder.Services.AddSingleton<AccountService>();
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = "Auth0";
+});
 builder.Services.AddHttpClient();
 builder.Services.AddDbContext<BookDataDbContext>(
         options => options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));

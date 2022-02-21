@@ -11,6 +11,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<BookService>();
+builder.Services.AddSingleton<AccountService>();
 builder.Services.AddHttpClient();
 builder.Services.AddDbContext<BookDataDbContext>(
         options => options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));

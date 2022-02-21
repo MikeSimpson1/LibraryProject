@@ -3,6 +3,7 @@
 <PageTitle>Register</PageTitle>
 
 @using LibraryApplication.Data
+@inject AccountService accountController
 
 <h1>Register</h1>
 
@@ -37,7 +38,7 @@
     {
         if (!StringUtils.IsNullOrEmpty(appUser.Email) && !StringUtils.IsNullOrEmpty(appUser.UserName) && !StringUtils.IsNullOrEmpty(unhashedPassword))
         {
-            //do stuff
+            accountController.RegisterUser(appUser);
         }
     }
 }

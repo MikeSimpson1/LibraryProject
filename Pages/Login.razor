@@ -1,0 +1,13 @@
+﻿@page "/login"
+<PageTitle>Login</PageTitle>
+
+@using LibraryApplication.Data
+
+<h1>Login</h1>
+<form action="/accountservice/externallogin" method="post">
+    <button type="submit" class="btn btn-primary" title="Login using your Google account">Google</button>
+</form>
+
+@code {
+    
+}

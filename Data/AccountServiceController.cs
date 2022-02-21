@@ -1,11 +1,14 @@
 ﻿namespace LibraryApplication.Data;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
-public class AccountService : Controller
+public class AccountServiceController : Controller
 {
-    public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, NavigationManager navManager)
+    public AccountServiceController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, NavigationManager navManager)
     {
         this.userManager = userManager;
         this.signInManager = signInManager;
@@ -36,5 +39,13 @@ public class AccountService : Controller
         {
             navManager.NavigateTo("/" + address + "/" + id);
         }
+    }
+
+    [AllowAnonymous]
+    public async Task<IActionResult> ExternalLogin()
+    {
+        var redirectUrl = Url.Action("ExternalLoginCallback", "AccountService", new { ReturnUrl = "/signin-google" });
+        var properties = signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
+        return new ChallengeResult("Google", properties);
     }
 }

@@ -8,3 +8,8 @@
 @using Microsoft.JSInterop
 @using LibraryApplication
 @using LibraryApplication.Shared
+@using LibraryApplication.Data
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<AppUser> signInManager;
+@inject IHttpContextAccessor _httpContextAccessor;

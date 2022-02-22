@@ -4,7 +4,7 @@ public static class StringUtils
 {
     public static bool IsNullOrEmpty(string s)
     {
-        if (s.Equals(null) || s.Equals(""))
+        if (s == null || s.Equals(""))
         {
             return true;
         }

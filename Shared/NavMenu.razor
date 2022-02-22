@@ -1,4 +1,5 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject SignInManager<AppUser> signInManager;
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">LibraryApplication</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -24,19 +25,44 @@
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
             </NavLink>
         </div>
-                <div class="nav-item px-3">
+        <div class="nav-item px-3">
             <NavLink class="nav-link" href="search">
                 <span class="oi oi-magnifying-glass" aria-hidden="true"></span> Search
             </NavLink>
         </div>
+        <footer class="footer pull-bottom" style="position: absolute; bottom:0"> 
+        @if (!signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="register">
+                    <span class="oi oi-wrench" aria-hidden="true"></span> Register
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="login">
+                    <span class="oi oi-account-login" aria-hidden="true"></span> Login
+                </NavLink>
+            </div>
+            }
+            else
+            {
+                     <div class="nav-item px-3">
+                         <NavLink class="nav-link" href="logout">
+                            <span class="oi oi-account-logout" aria-hidden="true"></span>@_httpContextAccessor.HttpContext.User.Identity.Name
+                         </NavLink>
+                    </div> 
+            }
+
+        </footer>
+
     </nav>
 </div>
 
 @code {
+    //CLASS CONTAINS A BUG WHERE REGISTER AND LOGIN DON'T SHOW UP ON MOBILE/SMALL SCREEN (TO DO WITH FOOTER)
     private bool collapseNavMenu = true;
-
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
+    
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;

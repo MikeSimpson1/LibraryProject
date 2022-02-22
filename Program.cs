@@ -17,12 +17,11 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = "cookies";
-    options.DefaultChallengeScheme = "oidc";
 })
   .AddCookie(options =>
   {
-      options.AccessDeniedPath = "/forbidden/";
-      options.LoginPath = "/login/";
+      options.AccessDeniedPath = "/forbidden";
+      options.LoginPath = "/login";
       options.Cookie.HttpOnly = true;
       options.Cookie.Name = "appcookie";
   })

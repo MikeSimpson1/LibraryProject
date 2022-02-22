@@ -45,7 +45,7 @@ public class AccountServiceController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> ExternalLogin()
     {
-        var redirectUrl = Url.Action("ExternalLoginCallback", "AccountService", new { ReturnUrl = "/signin-google" });
+        var redirectUrl = Url.Action("ExternalLoginCallback", "AccountService", new { ReturnUrl = "/" });
         var properties = signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
         return new ChallengeResult("Google", properties);
     }

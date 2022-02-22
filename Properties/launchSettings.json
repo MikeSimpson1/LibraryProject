@@ -10,12 +10,12 @@
   "profiles": {
     "LibraryApplication": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5280",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "http://localhost:5280",
+      "dotnetRunMessages": true
     },
     "IIS Express": {
       "commandName": "IISExpress",

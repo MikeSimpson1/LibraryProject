@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Security.Claims;
 
 public class AccountServiceController : Controller
 {
@@ -47,5 +48,53 @@ public class AccountServiceController : Controller
         var redirectUrl = Url.Action("ExternalLoginCallback", "AccountService", new { ReturnUrl = "/signin-google" });
         var properties = signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
         return new ChallengeResult("Google", properties);
+    }
+
+    [AllowAnonymous]
+    public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+    {
+        returnUrl = returnUrl ?? Url.Content("~/");
+        if (remoteError != null)
+        {
+            // display error
+            return LocalRedirect(returnUrl);
+        }
+        var info = await signInManager.GetExternalLoginInfoAsync();
+        if (info == null)
+        {
+            //error
+            return LocalRedirect(returnUrl);
+        }
+        var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+        if (signInResult.Succeeded)
+        {
+            return LocalRedirect(returnUrl);
+        }
+        else
+        {
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+            if (email!= null)
+            {
+                var user = await userManager.FindByEmailAsync(email);
+
+                if (user == null)
+                {
+                    user = new AppUser
+                    {
+                        UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                    };
+
+                    await userManager.CreateAsync(user);
+                }
+
+                await userManager.AddLoginAsync(user, info);
+                await signInManager.SignInAsync(user, isPersistent: false);
+
+                return LocalRedirect(returnUrl);
+            }
+        }
+        return LocalRedirect(returnUrl);
     }
 }

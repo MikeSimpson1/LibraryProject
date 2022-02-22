@@ -42,6 +42,15 @@ public class AccountServiceController : Controller
         }
     }
 
+    public async Task<IActionResult> Logout()
+    {
+        if (signInManager.IsSignedIn(User))
+        {
+            await signInManager.SignOutAsync();
+        }
+        return LocalRedirect("/");
+    }
+
     [AllowAnonymous]
     public async Task<IActionResult> ExternalLogin()
     {

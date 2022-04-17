@@ -64,3 +64,4 @@ C:\Users\Mike\Desktop\Honours Project\LibraryApplication\bin\Debug\net6.0\Micros
 C:\Users\Mike\Desktop\Honours Project\LibraryApplication\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\Mike\Desktop\Honours Project\LibraryApplication\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Mike\Desktop\Honours Project\LibraryApplication\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Mike\Desktop\Honours Project\LibraryApplication\bin\Debug\net6.0\aws-beanstalk-tools-defaults.json

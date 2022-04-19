@@ -130,4 +130,51 @@ public class BookService
             return db.Books.Find(id);
         }
     }
+
+    public List<BookData> getUsersBooks(string booksString)
+    {
+        if (StringUtils.IsNullOrEmpty(booksString))
+        {
+            return new List<BookData>();
+        }
+        List<BookData> listOfBooks = new List<BookData>();
+        string[] books = booksString.Split(',');
+        foreach (var b in books)
+        {
+            listOfBooks.Add(GetBookById(int.Parse(b)));
+        }
+        return listOfBooks;
+    }
+
+    public bool isOnBookList(string list, string bookId)
+    {
+        if (StringUtils.IsNullOrEmpty(list))
+        {
+            return false;
+        }
+        string[] IDList = list.Split(',');
+        int d = Array.IndexOf(IDList, bookId);
+        return d > -1 ? true : false;
+    }
+
+    public string AddToBookList(string list, string value)
+    {
+        if (StringUtils.IsNullOrEmpty(list))
+        {
+            return value;
+        }
+        list += "," + value;
+        return list;
+    }
+
+    public string RemoveFromBookList(string list, string value)
+    {
+        if (StringUtils.IsNullOrEmpty(list))
+        {
+            return "";
+        }
+        List<string> bookList = list.Split(',').ToList<string>();
+        bookList.Remove(value);
+        return string.Join(',',bookList);
+    }
 }

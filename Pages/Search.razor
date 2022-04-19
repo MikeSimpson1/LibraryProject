@@ -29,7 +29,14 @@
     .img {
         width: 128px;
         height: 185px;
-    }
+    }    .center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}.titleText{
+    text-align:center;
+}
 </style>
 <h1>Search</h1>
 
@@ -66,11 +73,11 @@ else
             foreach (BookData b in data)
             {
                 <div class="card" @onclick="() => Redirect(b.Id)">
-                    <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px">
+                    <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px" class="center">
                     <div class="container">
-                        <h4><b>@b.Title</b></h4>
-                        <p>@b.Author</p>
-                        <p>@b.PublishedDate</p>
+                        <h4 class="titleText"><b>@b.Title</b></h4>
+                        <p class="titleText">@b.Author</p>
+                        <p class="titleText">@b.PublishedDate</p>
                     </div>
                 </div>
             }

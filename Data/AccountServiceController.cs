@@ -74,7 +74,7 @@ public class AccountServiceController : Controller
             //error
             return LocalRedirect(returnUrl);
         }
-        var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+        var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: true, bypassTwoFactor: true);
         if (signInResult.Succeeded)
         {
             return LocalRedirect(returnUrl);
@@ -99,7 +99,7 @@ public class AccountServiceController : Controller
                 }
 
                 await userManager.AddLoginAsync(user, info);
-                await signInManager.SignInAsync(user, isPersistent: false);
+                await signInManager.SignInAsync(user, isPersistent: true);
 
                 return LocalRedirect(returnUrl);
             }

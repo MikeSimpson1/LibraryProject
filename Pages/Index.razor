@@ -11,6 +11,7 @@
         width: 200px;
         padding: 5px 5px;
         cursor:pointer;
+        border-radius: 12px;
     }
 
         /* On mouse-over, add a deeper shadow */
@@ -34,26 +35,31 @@
   width: 50%;
 }.titleText{
     text-align:center;
+}.card-deck{
+    margin-top: 15px;
+    margin-left: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+    grid-gap: .5rem;
 }
 </style>
-<h1>Hello, world!</h1>
+<h1>Welcome back!</h1>
 
-Welcome to your new app.
 @if (currentlyReading == null || currentlyReading.Count <= 0)
 {
 }
 else
 {
-    <p><em>Currently Reading</em></p>
-    <div class="row">
+    <div class="container-fluid" style="padding: 15px; background-color:#E2CC9B;border-radius: 12px">
+    <div class="card-deck">
         @if (currentlyReading.Count > 0)
         {
             foreach (BookData b in currentlyReading)
             {
                 <div class="card" @onclick="() => Redirect(b.Id)">
                     <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px" class="center">
-                    <div class="container">
-                        <h4 class="titleText"><b>@b.Title</b></h4>
+                    <div class="card-body">
+                        <h5 class="card-title"><b>@b.Title</b></h5>
                         <p class="titleText">@b.Author</p>
                         <p class="titleText">@b.PublishedDate</p>
                     </div>
@@ -61,28 +67,31 @@ else
             }
         }
     </div>
+    </div>
 }
 @if (wantToRead == null || wantToRead.Count <= 0)
 {
 }
 else
 {
-    <p><em>Want to Read</em></p>
-    <div class="row">
+    <h5>Want to Read</h5>
+    <div class="container-fluid" style="padding: 15px; background-color:#E2CC9B;border-radius: 12px">
+    <div class="card-deck">
         @if (wantToRead.Count > 0)
         {
             foreach (BookData b in wantToRead)
             {
                 <div class="card" @onclick="() => Redirect(b.Id)">
-                    <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px" class="center">
-                    <div class="container">
-                        <h4 class="titleText"><b>@b.Title</b></h4>
+                    <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px" class="card-img-top ; center">
+                    <div class="card-body">
+                        <h5 class="card-title"><b>@b.Title</b></h5>
                         <p class="titleText">@b.Author</p>
                         <p class="titleText">@b.PublishedDate</p>
                     </div>
                 </div>
             }
         }
+    </div>
     </div>
 }
 @if (read == null || read.Count <= 0)
@@ -91,21 +100,23 @@ else
 else
 {
     <p><em>Read</em></p>
-    <div class="row">
+    <div class="container-fluid" style="padding: 15px; background-color:#E2CC9B;border-radius: 12px">
+    <div class="card-deck">
         @if (read.Count > 0)
         {
             foreach (BookData b in read)
             {
                 <div class="card" @onclick="() => Redirect(b.Id)">
                     <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px" class="center">
-                    <div class="container">
-                        <h4 class="titleText"><b>@b.Title</b></h4>
+                    <div class="card-body">
+                        <h5 class="card-title"><b>@b.Title</b></h5>
                         <p class="titleText">@b.Author</p>
                         <p class="titleText">@b.PublishedDate</p>
                     </div>
                 </div>
             }
         }
+    </div>
     </div>
 }
 

@@ -1,6 +1,5 @@
 ﻿@page "/search"
 <PageTitle>Search</PageTitle>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 @using LibraryApplication.Data
 @inject BookService bookService
 @inject NavigationManager navManager
@@ -35,11 +34,17 @@
   width: 50%;
 }.titleText{
     text-align:center;
+}.card-deck{
+    margin-top: 15px;
+    margin-left: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-gap: .5rem;
 }
 </style>
 <h1>Search</h1>
 
-<p>This component demonstrates fetching data from a service.</p>
+<p>Each search will retrieve from the books.google.com API</p>
 
 <EditForm Model="@bookData" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -50,8 +55,10 @@
             Search:
             <InputText @bind-Value="bookData.Title" />
         </label>
-    </p>
-    <button type="submit">Search</button>
+    
+    <button type="submit" class="btn btn-primary" style="border-radius: 12px; background-color: white; color: black">Search</button>
+</p>
+
 </EditForm>
 
 @if (data == null || data.Count <= 0)
@@ -60,15 +67,16 @@
 }
 else
 {
-    <div class="row">
+    <div class="card-deck">
         @if (data.Count > 0)
         {
             foreach (BookData b in data)
             {
+
                 <div class="card" @onclick="() => Redirect(b.Id)">
-                    <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px" class="center">
-                    <div class="container">
-                        <h4 class="titleText"><b>@b.Title</b></h4>
+                    <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px" class="card-img-top; center">
+                    <div class="card-body">
+                        <h5 class="card-title"><b>@b.Title</b></h5>
                         <p class="titleText">@b.Author</p>
                         <p class="titleText">@b.PublishedDate</p>
                     </div>

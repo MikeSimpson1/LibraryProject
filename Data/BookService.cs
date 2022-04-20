@@ -11,7 +11,7 @@ public class BookService
     {
         this.scopeFactory = scopeFactory;
     }
-    public async Task<List<BookData>> GetBookDataAsync(string bookTitle, string bookAuthor)
+    public async Task<List<BookData>> GetBookDataAsync(string bookTitle, string startIndex)
     {
         using (var scope = scopeFactory.CreateScope())
         {
@@ -20,21 +20,8 @@ public class BookService
 
             List<BookData> books = new List<BookData>();
             bookTitle = bookTitle.Replace(" ", "+");
-            bookAuthor = bookAuthor.Replace(" ", "+");
 
-            /*  
-             *  TODO:
-             *  This needs to work. First query the database, and then query google.
-             * 
-             */
-            List<BookData> fromDb = GetBookDataFromDbAsync(bookTitle, bookAuthor);
-            if (fromDb.Count >= 10)
-            {
-                return fromDb;
-            }
-            //
-
-            string QueryString = "https://www.googleapis.com/books/v1/volumes?q=" + bookTitle + "+inauthor:" + bookAuthor;
+            string QueryString = "https://www.googleapis.com/books/v1/volumes?q=" + bookTitle + "&maxResults=20&startIndex=" + startIndex;
             var stringTask = await client.GetStringAsync(QueryString);
             dynamic? bookQuery = JsonConvert.DeserializeObject(stringTask);
             if (bookQuery != null && bookQuery.items != null)

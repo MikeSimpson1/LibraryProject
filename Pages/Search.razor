@@ -1,7 +1,6 @@
 ﻿@page "/search"
-
 <PageTitle>Search</PageTitle>
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 @using LibraryApplication.Data
 @inject BookService bookService
 @inject NavigationManager navManager
@@ -48,14 +47,8 @@
 
     <p>
         <label>
-            Title:
+            Search:
             <InputText @bind-Value="bookData.Title" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Author:
-            <InputText @bind-Value="bookData.Author" />
         </label>
     </p>
     <button type="submit">Search</button>
@@ -83,25 +76,61 @@ else
             }
         }
     </div>
+    <EditForm Model="@bookData" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+        @if (currentPage == 0)
+        {
+            <ul class="pager">
+              <li><button type="button" class="btn btn-outline-secondary" style="border-radius: 12px" @onclick="NextPage">Next</button></li>
+            </ul>
+        }
+        else
+        {
+            <ul class="pager">
+              <li><button type="button" class="btn btn-outline-secondary" style="border-radius: 12px" @onclick="PrevPage" >Previous</button></li>
+              <li><button type="button" class="btn btn-outline-secondary" style="border-radius: 12px" @onclick="NextPage">Next</button></li>
+            </ul>
+        }
+        </EditForm>
 }
 
 @code {
     private List<BookData>? data;
     private BookData bookData = new BookData("","","","", "", "", "");
+    private int currentPage = 0;
     private string feedback = "Search for books above!";
+    private string next = "";
+    private string prev = "";
 
     private async Task HandleValidSubmit()
     {
         feedback = "Searching...";
-        if (!StringUtils.IsNullOrEmpty(bookData.Title) && !StringUtils.IsNullOrEmpty(bookData.Author))
+        if (!StringUtils.IsNullOrEmpty(bookData.Title))
         {
-            data = await bookService.GetBookDataAsync(bookData.Title, bookData.Author);
+            data = await bookService.GetBookDataAsync(bookData.Title, "0");
         }
 
         if (data == null || data.Count <= 0)
         {
             feedback = "No books found.";
         }
+    }
+    private async Task NextPage()
+    {
+        currentPage = currentPage + 1;
+        Console.Write(currentPage);
+        int startIndex = currentPage * 20;
+        data = await bookService.GetBookDataAsync(bookData.Title, startIndex.ToString());
+    }
+        private async Task PrevPage()
+    {
+        if (currentPage > 0)
+        {
+            currentPage--;
+        }
+        int startIndex = currentPage * 20;
+        data = await bookService.GetBookDataAsync(bookData.Title, startIndex.ToString());
     }
 
     private void Redirect(int? id)

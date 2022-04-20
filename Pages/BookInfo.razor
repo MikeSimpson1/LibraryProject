@@ -27,7 +27,10 @@
         transition: 0.3s;
         width: 400px;
         padding: 5px 5px;
-        border-radius: 12px
+        border-radius: 12px;
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 10px; /* Added */
     }
 
         /* On mouse-over, add a deeper shadow */
@@ -54,13 +57,13 @@
 </style>
     @if (bookData != null)
 {
-    <h1>@bookData.Title</h1>
+    <h1 style="text-align: center">@bookData.Title</h1>
 
         <div class="card">
             <img src="@bookData.ImageLink" alt="Cover" style="width:128px;height:185px" class="card-img-top; center">
             <div class="card-body">
-                <h4 class="card-title ; center"><b>@bookData.Title</b></h4>
-                <p class="titleText">@bookData.Author</p>
+                <h4 class="card-title" style="text-align: center"><b>@bookData.Title</b></h4>
+                <p class="titleText" style="text-align: center">@bookData.Author</p>
                 <p>@bookData.Description</p>
                 <p>@bookData.PublishedDate</p>
             </div>
@@ -93,36 +96,40 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-        <p>
             <label>
                 Add a review:
-                <InputText @bind-Value="reviewData.Description" />
-            </label>
+                </label>
+                <p>
+                <InputTextArea @bind-Value="reviewData.Description" />
+            
     
         <button type="submit" class="btn btn-primary" style="border-radius: 12px; background-color: white; color: black">Submit</button>
     </p>
     </EditForm>
 }
 @if (reviews.Count() > 0){
-        foreach(var r in reviews){
-           <div class="card">
+        foreach(var r in reviews)
+        {
+            <div class="card">
                     <div class="card-body">
                         <img src="https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png" alt="Cover" style="width:30px;height:30px" class="card-img-top; center">
                         <h5 class="card-title ; center"><b>@r.User</b></h5>
                         <p class="titleText">@r.Description</p>
                         <p class="titleText">@r.Date</p>
                     </div>
-        </div>
-    }
+            </div>
+        }
 }
 else
 {
     @if (signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
-{
+    {
     <h4>There are currently no reviews for this book.</h4>
-}else{
+    }
+    else
+    {
     <h4>Please sign in to see reviews.</h4>
-}
+    }
 }
 
 @code {

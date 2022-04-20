@@ -9,7 +9,7 @@
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         transition: 0.3s;
         width: 200px;
-        padding: 5px 5px;
+        padding: 15px 5px;
         cursor:pointer;
         border-radius: 12px;
     }
@@ -37,10 +37,9 @@
     text-align:center;
 }.card-deck{
     margin-top: 15px;
-    margin-left: auto;
+    margin-left: 10px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
-    grid-gap: .5rem;
+    padding:10px
 }
 </style>
 <h1>Welcome back!</h1>
@@ -52,6 +51,7 @@ else
 {
     <div class="container-fluid" style="padding: 15px; background-color:#E2CC9B;border-radius: 12px">
     <div class="card-deck">
+        <div class="row">
         @if (currentlyReading.Count > 0)
         {
             foreach (BookData b in currentlyReading)
@@ -66,6 +66,7 @@ else
                 </div>
             }
         }
+        </div>
     </div>
     </div>
 }
@@ -129,9 +130,18 @@ else
         if (signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
         {
             var user = await userManager.FindByEmailAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
-            currentlyReading = bookService.getUsersBooks(user.BooksCurrentlyReading);
-            wantToRead = bookService.getUsersBooks(user.BooksWantToRead);
-            read = bookService.getUsersBooks(user.BooksRead);
+            if (!StringUtils.IsNullOrEmpty(user.BooksCurrentlyReading))
+            {
+                currentlyReading = bookService.getUsersBooks(user.BooksCurrentlyReading);
+            }
+            if (!StringUtils.IsNullOrEmpty(user.BooksWantToRead))
+            {
+                wantToRead = bookService.getUsersBooks(user.BooksWantToRead);
+            }
+            if (!StringUtils.IsNullOrEmpty(user.BooksRead))
+            {
+                read = bookService.getUsersBooks(user.BooksRead);
+            }
         }
     }
     private void Redirect(int? id)

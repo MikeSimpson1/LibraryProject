@@ -40,6 +40,9 @@ builder.Services.AddHttpClient();
 builder.Services.AddDbContext<BookDataDbContext>(
         options => options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
 
+builder.Services.AddDbContext<ReviewDataDbContext>(
+        options => options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
+
 builder.Services.AddDbContext<UserDbContext>(
         options => options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
 builder.Services.AddIdentity<AppUser, IdentityRole>()

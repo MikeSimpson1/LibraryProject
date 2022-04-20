@@ -118,6 +118,26 @@ public class BookService
         }
     }
 
+    public List<ReviewData> GetReviewsByBookId(string id)
+    {
+        using (var scope = scopeFactory.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ReviewDataDbContext>();
+            return db.Reviews.AsQueryable().Where(b => b.BookID.Contains(id)).ToList<ReviewData>();
+        }
+    }
+
+    public async Task<bool> AddBookReview(ReviewData review)
+    {
+        using (var scope = scopeFactory.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ReviewDataDbContext>();
+            db.Add(review);
+            await db.SaveChangesAsync();
+            return true;
+        }
+    }
+
     public List<BookData> getUsersBooks(string booksString)
     {
         if (StringUtils.IsNullOrEmpty(booksString))

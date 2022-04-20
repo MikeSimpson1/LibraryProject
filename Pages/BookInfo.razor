@@ -50,7 +50,7 @@
         <div class="card">
             <img src="@bookData.ImageLink" alt="Cover" style="width:128px;height:185px" class="card-img-top; center">
             <div class="card-body">
-                <h4 class="card-title"><b>@bookData.Title</b></h4>
+                <h4 class="card-title ; center"><b>@bookData.Title</b></h4>
                 <p class="titleText">@bookData.Author</p>
                 <p>@bookData.Description</p>
                 <p>@bookData.PublishedDate</p>
@@ -65,11 +65,42 @@
             }
         </div>
 }
+<h1>Reviews</h1>
+@if (signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
+{
+    <EditForm Model="@reviewData" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <p>
+            <label>
+                Add a review:
+                <InputText @bind-Value="reviewData.Description" />
+            </label>
+    
+        <button type="submit" class="btn btn-primary" style="border-radius: 12px; background-color: white; color: black">Submit</button>
+    </p>
+    </EditForm>
+}
+@if (reviews != null){
+        foreach(var r in reviews){
+           <div class="card">
+                    <div class="card-body">
+                        <img src="https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png" alt="Cover" style="width:30px;height:30px" class="card-img-top; center">
+                        <h5 class="card-title ; center"><b>@r.User</b></h5>
+                        <p class="titleText">@r.Description</p>
+                        <p class="titleText">@r.Date</p>
+                    </div>
+                </div>
+        }
+}
 
 @code {
     [Parameter]
     public string id { get; set; }
     private BookData bookData = null;
+    private List<ReviewData> reviews = new List<ReviewData>();
+    private ReviewData reviewData = new ReviewData();
     private string isCurrentlyReadingString = "Add to: Currently Reading";
     private string isWantToReadString = "Add to: Want to Read";
     private string isReadString = "Add to: Read";
@@ -77,11 +108,11 @@
     private bool isWantToRead = false;
     private bool isRead = false;
 
-
     protected override async Task OnInitializedAsync()
     {
         int Id = int.Parse(id);
         bookData = bookService.GetBookById(Id);
+        reviews = bookService.GetReviewsByBookId(id);
         if (signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
         {
             var user = await userManager.FindByEmailAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
@@ -104,6 +135,18 @@
                 }
             }
         }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (!StringUtils.IsNullOrEmpty(reviewData.Description))
+        {
+            reviewData.User = _httpContextAccessor.HttpContext.User.Identity.Name;
+            reviewData.Date = DateTime.Today.ToString("yyyy-MM-dd");
+            reviewData.BookID = id;
+            await bookService.AddBookReview(reviewData);
+        }
+        StateHasChanged();
     }
 
     private async void ToggleIsCurrentlyReading()

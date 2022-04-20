@@ -12,6 +12,15 @@
 @inject NavigationManager navManager
 
 <style>
+    #outer
+{
+    width:100%;
+    text-align: center;
+}
+.inner
+{
+    display: inline-block;
+}
     .card {
         /* Add shadows to create the "card" effect */
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -57,10 +66,22 @@
             </div>
             @if (signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
             {
-                <div>
-                    <button type="button" runat="server" onclick="@ToggleIsCurrentlyReading">@isCurrentlyReadingString</button>
-                    <button type="button" runat="server" onclick="@ToggleIsWantToRead">@isWantToReadString</button>
-                    <button type="button" runat="server" onclick="@ToggleIsRead">@isReadString</button>
+                <div id="outer">
+                    <div title="@isCurrentlyReadingString" class="inner">
+                        <button class="@buttonStyle1" runat="server" onclick="@ToggleIsCurrentlyReading">
+                                <span class="oi oi-book" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div title="@isWantToReadString" class="inner">
+                        <button class="@buttonStyle2" runat="server" onclick="@ToggleIsWantToRead">
+                            <span class="oi oi-list" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div title="@isReadString" class="inner">
+                        <button class="@buttonStyle3" runat="server" onclick="@ToggleIsRead">
+                            <span class="oi oi-check" aria-hidden="true"></span>
+                        </button>
+                    </div>
                 </div>
             }
         </div>
@@ -82,7 +103,7 @@
     </p>
     </EditForm>
 }
-@if (reviews != null){
+@if (reviews.Count() > 0){
         foreach(var r in reviews){
            <div class="card">
                     <div class="card-body">
@@ -91,8 +112,17 @@
                         <p class="titleText">@r.Description</p>
                         <p class="titleText">@r.Date</p>
                     </div>
-                </div>
-        }
+        </div>
+    }
+}
+else
+{
+    @if (signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
+{
+    <h4>There are currently no reviews for this book.</h4>
+}else{
+    <h4>Please sign in to see reviews.</h4>
+}
 }
 
 @code {
@@ -101,12 +131,18 @@
     private BookData bookData = null;
     private List<ReviewData> reviews = new List<ReviewData>();
     private ReviewData reviewData = new ReviewData();
+
     private string isCurrentlyReadingString = "Add to: Currently Reading";
-    private string isWantToReadString = "Add to: Want to Read";
-    private string isReadString = "Add to: Read";
     private bool isCurrentlyReading = false;
+    private string buttonStyle1 = "btn btn-light";
+
+    private string isWantToReadString = "Add to: Want to Read";
     private bool isWantToRead = false;
+    private string buttonStyle2 = "btn btn-light";
+
+    private string isReadString = "Add to: Read";
     private bool isRead = false;
+    private string buttonStyle3 = "btn btn-light";
 
     protected override async Task OnInitializedAsync()
     {
@@ -122,16 +158,19 @@
                 {
                     isCurrentlyReadingString = "Remove from: Currently Reading";
                     isCurrentlyReading = true;
+                    buttonStyle1 = "btn btn-dark";
                 }
                 if (bookService.isOnBookList(user.BooksWantToRead, id))
                 {
                     isWantToReadString = "Remove from: Want to Read";
                     isWantToRead = true;
+                    buttonStyle2 = "btn btn-dark";
                 }
                 if (bookService.isOnBookList(user.BooksRead, id))
                 {
                     isReadString = "Remove from: Read";
                     isRead = true;
+                    buttonStyle3 = "btn btn-dark";
                 }
             }
         }
@@ -158,6 +197,7 @@
             user.BooksCurrentlyReading = newList;
             isCurrentlyReadingString = "Add to: Currently Reading";
             isCurrentlyReading = false;
+            buttonStyle1 = "btn btn-light";
         }
         else
         {
@@ -165,6 +205,7 @@
             user.BooksCurrentlyReading = newList;
             isCurrentlyReadingString = "Remove from: Currently Reading";
             isCurrentlyReading = true;
+            buttonStyle1 = "btn btn-dark";
         }
         await userManager.UpdateAsync(user);
         StateHasChanged();
@@ -179,6 +220,7 @@
             user.BooksWantToRead = newList;
             isWantToReadString = "Add to: Want to Read";
             isWantToRead = false;
+            buttonStyle2 = "btn btn-light";
         }
         else
         {
@@ -186,6 +228,7 @@
             user.BooksWantToRead = newList;
             isWantToReadString = "Remove from: Want to Read";
             isWantToRead = true;
+            buttonStyle2 = "btn btn-dark";
         }
         await userManager.UpdateAsync(user);
         StateHasChanged();
@@ -200,6 +243,7 @@
             user.BooksRead = newList;
             isReadString = "Add to: Read";
             isRead = false;
+            buttonStyle3 = "btn btn-light";
         }
         else
         {
@@ -207,6 +251,7 @@
             user.BooksRead = newList;
             isReadString = "Remove from: Read";
             isRead = true;
+            buttonStyle3 = "btn btn-dark";
         }
         await userManager.UpdateAsync(user);
         StateHasChanged();

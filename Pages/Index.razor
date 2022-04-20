@@ -42,13 +42,17 @@
     padding:10px
 }
 </style>
-<h1>Welcome back!</h1>
-
+<h1>Welcome!</h1>
+            @if (!signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
+            {
+    <h4>Please sign in to view your bookshelf.</h4>
+}
 @if (currentlyReading == null || currentlyReading.Count <= 0)
 {
 }
 else
 {
+    <h5><b>Currently Reading</b></h5>
     <div class="container-fluid" style="padding: 15px; background-color:#E2CC9B;border-radius: 12px">
     <div class="card-deck">
         <div class="row">
@@ -75,9 +79,11 @@ else
 }
 else
 {
-    <h5>Want to Read</h5>
+    <p>&nbsp;&nbsp;</p>
+    <h5><b>Want to Read</b></h5>
     <div class="container-fluid" style="padding: 15px; background-color:#E2CC9B;border-radius: 12px">
     <div class="card-deck">
+        <div class="row">
         @if (wantToRead.Count > 0)
         {
             foreach (BookData b in wantToRead)
@@ -92,6 +98,7 @@ else
                 </div>
             }
         }
+        </div>
     </div>
     </div>
 }
@@ -100,9 +107,11 @@ else
 }
 else
 {
-    <p><em>Read</em></p>
+    <p>&nbsp;&nbsp;</p>
+    <h5><b>Read</b></h5>
     <div class="container-fluid" style="padding: 15px; background-color:#E2CC9B;border-radius: 12px">
     <div class="card-deck">
+        <div class="row">
         @if (read.Count > 0)
         {
             foreach (BookData b in read)
@@ -117,6 +126,7 @@ else
                 </div>
             }
         }
+        </div>
     </div>
     </div>
 }

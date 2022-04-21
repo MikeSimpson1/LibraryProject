@@ -78,8 +78,15 @@ public class BookService
                     catch (Exception e) { Console.Write(e.Message); }
 
                     BookData b = new(title, author, published, image, isbn, pagecount, description);
-                    books.Add(b);
-                    if (!db.Books.Contains(b))
+                    if (GetBookByISBN(b.Isbn_13) != null)
+                    {
+                        books.Add(GetBookByISBN(b.Isbn_13));
+                    }
+                    else
+                    {
+                        books.Add(b);
+                    }
+                    if (!(db.Books.AsQueryable().Where(bb => bb.Isbn_13.Contains(b.Isbn_13)).ToList<BookData>().Count() > 0))
                     {
                         db.Add(b);
                     }
@@ -105,7 +112,12 @@ public class BookService
         using (var scope = scopeFactory.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<BookDataDbContext>();
-            return db.Books.Find(isbn);
+            List<BookData> l = db.Books.AsQueryable().Where(b => b.Isbn_13.Contains(isbn)).ToList<BookData>(); //|| b.Author.Contains(author)
+            if (l.Count() > 0)
+            {
+                return l.First();
+            }
+            return null;
         }
     }
 

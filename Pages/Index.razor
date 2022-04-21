@@ -9,8 +9,10 @@
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         transition: 0.3s;
         width: 200px;
-        padding: 5px 5px;
+        padding: 15px 5px;
         cursor:pointer;
+        border-radius: 12px;
+        background-color:#e9f8fe;
     }
 
         /* On mouse-over, add a deeper shadow */
@@ -34,32 +36,43 @@
   width: 50%;
 }.titleText{
     text-align:center;
+}.card-deck{
+    margin-top: 15px;
+    margin-left: 10px;
+    display: grid;
+    padding:10px
 }
 </style>
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+<h1>Welcome!</h1>
+            @if (!signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
+            {
+    <h4>Please sign in to view your bookshelf.</h4>
+}
 @if (currentlyReading == null || currentlyReading.Count <= 0)
 {
 }
 else
 {
-    <p><em>Currently Reading</em></p>
-    <div class="row">
+    <h5><b>Currently Reading</b></h5>
+    <div class="container-fluid" style="padding: 15px; background-color:#668e99;border-radius: 12px">
+    <div class="card-deck">
+        <div class="row">
         @if (currentlyReading.Count > 0)
         {
             foreach (BookData b in currentlyReading)
             {
                 <div class="card" @onclick="() => Redirect(b.Id)">
                     <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px" class="center">
-                    <div class="container">
-                        <h4 class="titleText"><b>@b.Title</b></h4>
+                    <div class="card-body">
+                        <h5 class="card-title"><b>@b.Title</b></h5>
                         <p class="titleText">@b.Author</p>
                         <p class="titleText">@b.PublishedDate</p>
                     </div>
                 </div>
             }
         }
+        </div>
+    </div>
     </div>
 }
 @if (wantToRead == null || wantToRead.Count <= 0)
@@ -67,22 +80,27 @@ else
 }
 else
 {
-    <p><em>Want to Read</em></p>
-    <div class="row">
+    <p>&nbsp;&nbsp;</p>
+    <h5><b>Want to Read</b></h5>
+    <div class="container-fluid" style="padding: 15px; background-color:#668e99;border-radius: 12px">
+    <div class="card-deck">
+        <div class="row">
         @if (wantToRead.Count > 0)
         {
             foreach (BookData b in wantToRead)
             {
                 <div class="card" @onclick="() => Redirect(b.Id)">
-                    <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px" class="center">
-                    <div class="container">
-                        <h4 class="titleText"><b>@b.Title</b></h4>
+                    <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px" class="card-img-top ; center">
+                    <div class="card-body">
+                        <h5 class="card-title"><b>@b.Title</b></h5>
                         <p class="titleText">@b.Author</p>
                         <p class="titleText">@b.PublishedDate</p>
                     </div>
                 </div>
             }
         }
+        </div>
+    </div>
     </div>
 }
 @if (read == null || read.Count <= 0)
@@ -90,22 +108,27 @@ else
 }
 else
 {
-    <p><em>Read</em></p>
-    <div class="row">
+    <p>&nbsp;&nbsp;</p>
+    <h5><b>Read</b></h5>
+    <div class="container-fluid" style="padding: 15px; background-color:#668e99;border-radius: 12px">
+    <div class="card-deck">
+        <div class="row">
         @if (read.Count > 0)
         {
             foreach (BookData b in read)
             {
                 <div class="card" @onclick="() => Redirect(b.Id)">
                     <img src="@b.ImageLink" alt="Cover" style="width:128px;height:185px" class="center">
-                    <div class="container">
-                        <h4 class="titleText"><b>@b.Title</b></h4>
+                    <div class="card-body">
+                        <h5 class="card-title"><b>@b.Title</b></h5>
                         <p class="titleText">@b.Author</p>
                         <p class="titleText">@b.PublishedDate</p>
                     </div>
                 </div>
             }
         }
+        </div>
+    </div>
     </div>
 }
 
@@ -118,9 +141,18 @@ else
         if (signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
         {
             var user = await userManager.FindByEmailAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
-            currentlyReading = bookService.getUsersBooks(user.BooksCurrentlyReading);
-            wantToRead = bookService.getUsersBooks(user.BooksWantToRead);
-            read = bookService.getUsersBooks(user.BooksRead);
+            if (!StringUtils.IsNullOrEmpty(user.BooksCurrentlyReading))
+            {
+                currentlyReading = bookService.getUsersBooks(user.BooksCurrentlyReading);
+            }
+            if (!StringUtils.IsNullOrEmpty(user.BooksWantToRead))
+            {
+                wantToRead = bookService.getUsersBooks(user.BooksWantToRead);
+            }
+            if (!StringUtils.IsNullOrEmpty(user.BooksRead))
+            {
+                read = bookService.getUsersBooks(user.BooksRead);
+            }
         }
     }
     private void Redirect(int? id)

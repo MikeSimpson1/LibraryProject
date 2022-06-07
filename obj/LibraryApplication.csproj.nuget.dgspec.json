@@ -44,6 +44,14 @@
               "target": "Package",
               "version": "[4.1.2, )"
             },
+            "IronPython": {
+              "target": "Package",
+              "version": "[2.7.12, )"
+            },
+            "IronPython.StdLib": {
+              "target": "Package",
+              "version": "[2.7.12, )"
+            },
             "Microsoft.AspNet.Mvc": {
               "target": "Package",
               "version": "[5.2.7, )"

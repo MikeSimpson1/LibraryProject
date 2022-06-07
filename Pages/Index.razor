@@ -2,6 +2,7 @@
 @inject BookService bookService
 @inject UserManager<AppUser> userManager
 @inject NavigationManager navManager
+@inject ImageService ic
 <PageTitle>Index</PageTitle>
 <style>
     .card {
@@ -138,6 +139,7 @@ else
     private List<BookData>? read;
     protected override async Task OnInitializedAsync()
     {
+        ic.test();
         if (signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
         {
             var user = await userManager.FindByEmailAsync(_httpContextAccessor.HttpContext.User.Identity.Name);

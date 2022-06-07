@@ -139,7 +139,7 @@ else
     private List<BookData>? read;
     protected override async Task OnInitializedAsync()
     {
-        ic.test();
+        ic.testAsync();
         if (signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
         {
             var user = await userManager.FindByEmailAsync(_httpContextAccessor.HttpContext.User.Identity.Name);

@@ -1,1 +1,1 @@
-[![View project report][Honours Project Report.pdf]
+<a href="Honours Project Report.pdf" type="application/pdf">View Project Report</a>

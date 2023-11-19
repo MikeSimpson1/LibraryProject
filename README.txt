@@ -1,1 +1,1 @@
-[View documentation](Honours Project Report.pdf)
+[![View project report][Honours Project Report.pdf]
